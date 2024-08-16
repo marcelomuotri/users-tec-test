@@ -62,7 +62,6 @@ export const logoutUser = createAsyncThunk(
 export const loadAuthFromStorage = createAsyncThunk(
   "auth/loadAuthFromStorage",
   async (_, thunkAPI) => {
-    console.log("holiss");
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     if (token && email) {
