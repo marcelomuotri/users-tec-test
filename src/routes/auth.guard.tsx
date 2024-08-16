@@ -4,16 +4,17 @@ import { RootState } from "../framework/state/store";
 import { Box } from "@mui/material";
 import Loader from "../components/Loader";
 import { useEffect } from "react";
-import { loginSuccess } from "../framework/state/slices/authSlice";
-import { useAuthService } from "../framework/state/services/authService";
+import { loadAuthFromStorage } from "../framework/state/slices/authSlice";
+import { AppDispatch } from "../framework/state/store";
 
 const AuthGuard = () => {
   const location = useLocation();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { token, loading } = useSelector((state: RootState) => state.auth);
-  useAuthService();
-  console.log(loading);
+  useEffect(() => {
+    dispatch(loadAuthFromStorage());
+  }, [dispatch]);
 
   const isAuthenticated = !!token;
 

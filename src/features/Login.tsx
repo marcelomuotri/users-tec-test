@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { Box, Button, TextField, Theme, Typography } from "@mui/material";
-import { useAuthService } from "../framework/state/services/authService";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../framework/state/store";
 import Loader from "../components/Loader";
+import {
+  loadAuthFromStorage,
+  loginUser,
+} from "../framework/state/slices/authSlice";
+import { AppDispatch } from "../framework/state/store";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   login: {
@@ -53,19 +57,23 @@ const Login = () => {
     loading,
     error,
   } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loginUser } = useAuthService();
   const navigation = useNavigate();
+  console.log(error);
+
+  useEffect(() => {
+    dispatch(loadAuthFromStorage());
+  }, [dispatch]);
 
   useEffect(() => {
     if (loggedUser) navigation("/");
   }, [loggedUser, navigation]);
 
   const onHandleLogin = async () => {
-    const response = await loginUser({ email, password });
-
-    if (response) {
+    dispatch(loginUser({ email, password }));
+    if (loggedUser) {
       navigation("/");
     }
   };
@@ -93,7 +101,7 @@ const Login = () => {
           variant="outlined"
           size="small"
         />
-        {error && <Typography> {error}</Typography>}
+        {error && <Typography> Incorrect credentials</Typography>}
         <Button className={classes.login__button} onClick={onHandleLogin}>
           Login
         </Button>

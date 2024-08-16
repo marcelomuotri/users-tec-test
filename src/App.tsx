@@ -39,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <div>NOOOOO</div>,
+    element: <div>404 not found</div>,
   },
 ]);
 

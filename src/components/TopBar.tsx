@@ -1,8 +1,9 @@
 import { makeStyles } from "tss-react/mui";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { useAuthService } from "../framework/state/services/authService";
 import { useSelector } from "react-redux";
-import { RootState } from "../framework/state/store";
+import { AppDispatch, RootState } from "../framework/state/store";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../framework/state/slices/authSlice";
 
 const useStyles = makeStyles()((theme) => ({
   topBar: {
@@ -21,11 +22,11 @@ const useStyles = makeStyles()((theme) => ({
 
 const TopBar = () => {
   const { classes } = useStyles();
-  const { logoutUser } = useAuthService();
+  const dispatch = useDispatch<AppDispatch>();
   const { email } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
-    logoutUser();
+    dispatch(logoutUser());
   };
 
   return (
